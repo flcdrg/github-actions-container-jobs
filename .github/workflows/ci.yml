@@ -1,0 +1,58 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  with-container:
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/powershell:ubuntu-22.04
+
+    steps:
+      - run: |
+          Get-ChildItem Env: | Sort-Object Name | Format-Table -Wrap -AutoSize
+        shell: pwsh
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump workflow_run context
+        env:
+          WORKFLOW_RUN_CONTEXT: ${{ toJSON(github.event.workflow_run) }}
+        run: echo "$WORKFLOW_RUN_CONTEXT"
+
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+
+  without-container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          Get-ChildItem Env: | Sort-Object Name | Format-Table -Wrap -AutoSize
+        shell: pwsh
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: Dump workflow_run context
+        env:
+          WORKFLOW_RUN_CONTEXT: ${{ toJSON(github.event.workflow_run) }}
+        run: echo "$WORKFLOW_RUN_CONTEXT"
+
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
