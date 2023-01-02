@@ -35,6 +35,9 @@ jobs:
           JOB_CONTEXT: ${{ toJSON(job) }}
         run: echo "$JOB_CONTEXT"
 
+      - run: echo "hi"
+        if: ${{ job.container }}
+
   without-container:
     runs-on: ubuntu-latest
 
@@ -56,3 +59,6 @@ jobs:
         env:
           JOB_CONTEXT: ${{ toJSON(job) }}
         run: echo "$JOB_CONTEXT"
+
+      - run: echo "hi"
+        if: ${{ job.container }}
